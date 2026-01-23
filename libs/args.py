@@ -33,6 +33,12 @@ def parser():
         action="store_true",
         help="Start web server to display keyboard layout in browser",
     )
+    parser.add_argument(
+        "-b",
+        "--ble",
+        action="store_true",
+        help="Use paired Bluetooth keyboard (reads HID via OS)",
+    )
     args = parser.parse_args()
 
     if args.server_ip and not args.client:
