@@ -5,6 +5,9 @@
 
 Display the selected keyboard layer layout on screen to assist you in memorizing the keymaps.
 
+![Remote](./assets/remote-client.png)
+
+
 ## Features
 
 - **USB and Bluetooth support** — Works with QMK/Vial keyboards via USB, and ZMK keyboards via USB or Bluetooth
@@ -227,7 +230,6 @@ The Desktop application might be more responsive, but requires Python installati
 
 The web application only requires a web browser, but it needs the server IP address to be specified in the URL. It should work on any modern browser and screen size.
 
-![Remote](./assets/remote-client.png)
 
 
 ## Firmware Setup
