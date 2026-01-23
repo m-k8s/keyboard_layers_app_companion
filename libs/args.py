@@ -37,7 +37,7 @@ def parser():
         "-b",
         "--ble",
         action="store_true",
-        help="Use paired Bluetooth keyboard (reads HID via OS)",
+        help="Use paired Bluetooth keyboard",
     )
     args = parser.parse_args()
 
@@ -46,7 +46,7 @@ def parser():
 
     if args.client and args.server:
         parser.error("Use --client or --server, not both")
-    
+
     if args.web and (args.client or args.server):
         parser.error("--web cannot be used with --client or --server")
 
