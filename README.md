@@ -15,6 +15,7 @@ Demonstration video:
 <!-- BEGIN mktoc {"min_depth":2, "max_depth":5} -->
 
 - [Display on a remote host](#display-on-a-remote-host)
+- [ZMK Firmware](#zmk-firmware)
 - [QMK/Vial Firmware changes](#qmkvial-firmware-changes)
 - [Configuration](#configuration)
 - [Define your own layouts images](#define-your-own-layouts-images)
@@ -25,6 +26,7 @@ Demonstration video:
   - [Install Dependencies (macOS/Linux)](#install-dependencies-macoslinux)
 - [How to run](#how-to-run)
   - [Run the Desktop application locally](#run-the-desktop-application-locally)
+  - [Bluetooth (ZMK only)](#bluetooth-zmk-only)
   - [Remote Display - Web application](#remote-display---web-application)
   - [Remote Display - Desktop Application](#remote-display---desktop-application)
 <!-- END mktoc -->
@@ -40,9 +42,16 @@ The web application only requires a web browser, but it needs the server IP addr
 ![Remote](./assets/remote-client.png)
 
 
+## ZMK Firmware
+
+For ZMK keyboards, follow the [zmk-feature-appcompanion](https://github.com/maatthc/zmk-feature-appcompanion) module instructions to build your firmware. This [repo](https://github.com/maatthc/zmk-crosses) includes all the required changes and can be used as a reference.
+
+Both USB and Bluetooth are supported, although `root` privileges are required for Bluetooth.
+
+
 ## QMK/Vial Firmware changes
 
-The application works by receiving data sent to the computer by the keyboard when it switchs between layers, using raw HID.
+The application works by receiving data sent to the computer by the keyboard when it switches between layers, using raw HID.
 
 It requires the following to be added to your QMK/Vial firmware [(reference)](https://github.com/maatthc/qmk_userspace/tree/main/keyboards/beekeeb/piantor/keymaps/manna_harbour_miryoku):
 
@@ -94,23 +103,26 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 The Configuration is done via the `config.ini` file.
 
--   Keyboard's USB details: if you used the example code above, there is no need to change the usage page and usage values.
-
--   Layer image files: the example files are for Miryoku QMK, but you can define your own (see below). Layers that are not used can be left empty.
+-   Keyboard's USB details: for QMK/ZMK keyboards using USB.
+-   Keyboard's BLE details: only required for ZMK keyboards using Bluetooth.
+-   Layer image files: the example files are for Miryoku QMK, but you can define your own (see below). Layers that are not used might define a fallback image.
 
 Example `config.ini`:
 
 ``` ini
-
 [KEYBOARD_USB_HID]
 usage_page = 0xFF60
 usage = 0x61
 
+[KEYBOARD_BLE_HID]
+vendor_id = 0x1D50
+product_id = 0x615E
+
 [LAYER_IMAGES]
 layer_0 = base.png 
-layer_1 = 
-layer_2 =
-layer_3 =
+layer_1 = virtual_keyboard.png
+layer_2 = virtual_keyboard.png
+layer_3 = virtual_keyboard.png
 layer_4 = nav.png 
 layer_5 = mouse.png 
 layer_6 = media.png 
@@ -142,14 +154,14 @@ Release packages are available with all dependencies included, so you don't need
 Download the latest release from the [Releases](https://github.com/maatthc/qmk_layers_app_companion/releases/) page, unzip it and run `Keyboard Companion.exe`.
 
 ### Linux
-Fist install [HIDAPI](https://pypi.org/project/hid/) on your system. E.g. on Fedora:
+First install [HIDAPI](https://pypi.org/project/hid/) on your system. E.g. on Fedora:
 
 `dnf install hidapi`
 
 
 ### macOS
 
-Fist install [HIDAPI](https://pypi.org/project/hid/) on your system. E.g. :
+First install [HIDAPI](https://pypi.org/project/hid/) on your system. E.g. :
 
 `brew install hidapi`
 
@@ -180,6 +192,28 @@ Advantage: layout is displayed with minimum latency.
 - macOS/Linux: run the following command from the repo folder:
 
 `pipenv run python main.py`
+
+### Bluetooth (ZMK only)
+
+Pair your ZMK keyboard via Bluetooth. Refer to the ZMK Firmware section above for instructions on how to build your firmware.
+
+Due to system restrictions on *macOS*, `root` privileges are required to access Bluetooth HID devices.
+
+
+```bash
+sudo pipenv run python main.py --ble
+
+```
+
+BLE can be combined with other options, for example:
+
+```bash
+# BLE + web server
+pipenv run python main.py --ble --web
+
+# BLE + remote server
+pipenv run python main.py --ble --server
+```
 
 ### Remote Display - Web application
 
