@@ -4,8 +4,6 @@ from libs.config import Config
 from tenacity import retry, wait_exponential
 
 
-VENDOR_ID = 0x1D50  # ZMK default
-PRODUCT_ID = 0x615E  # ZMK default
 USAGE_PAGE = 0x01  # Generic Desktop
 USAGE_KEYBOARD = 0x06  # Keyboard
 
@@ -19,6 +17,9 @@ class KeyboardBLEHID:
         self.hid = self.find_device()
         if self.hid is None:
             print("\nNo accessible Bluetooth keyboard HID device found.")
+            print(
+                f"Please ensure your keyboard is connected and configured correctly on the file {self.config._config_file}"
+            )
             self.print_help()
             self.print_available_devices()
             sys.exit(1)
@@ -28,8 +29,8 @@ class KeyboardBLEHID:
         keyboards = [
             d
             for d in devices
-            if d.get("vendor_id") == VENDOR_ID
-            and d.get("product_id") == PRODUCT_ID
+            if d.get("vendor_id") == self.config.vendor_id
+            and d.get("product_id") == self.config.product_id
             and d.get("usage_page") == USAGE_PAGE
             and d.get("usage") == USAGE_KEYBOARD
         ]
