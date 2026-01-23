@@ -7,6 +7,7 @@ from libs.webserver import WebServer
 from libs.args import parser
 from libs.keyboard_hid import Keyboard
 from libs.consumer import ConsumerInterface
+from libs.keyboard_ble_hid import KeyboardBLEHID
 
 
 async def main():
@@ -18,7 +19,11 @@ async def main():
         await cli.start()
         consumer = Gui(cli)
     else:
-        keyboard = Keyboard()
+        if args.ble:
+            keyboard = KeyboardBLEHID()
+        else:
+            keyboard = Keyboard()
+
         if args.server:
             consumer = Server(keyboard, args)
         elif args.web:

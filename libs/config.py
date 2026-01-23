@@ -20,11 +20,20 @@ class Config:
 
         if "KEYBOARD_USB_HID" in Config._config:
             keyboard = Config._config["KEYBOARD_USB_HID"]
-            Config.usage_page = int(keyboard["usage_page"], 16)
-            Config.usage = int(keyboard["usage"], 16)
-        else:
+            Config.usage_page = int(keyboard.get("usage_page", "0xFF60"), 16)
+            Config.usage = int(keyboard.get("usage", "0x61"), 16)
+
+        if "KEYBOARD_BLE_HID" in Config._config:
+            keyboard = Config._config["KEYBOARD_BLE_HID"]
+            Config.vendor_id = int(keyboard.get("vendor_id", "0xFEED"), 16)
+            Config.product_id = int(keyboard.get("product_id", "0x6000"), 16)
+
+        if (
+            "KEYBOARD_USB_HID" not in Config._config
+            and "KEYBOARD_BLE_HID" not in Config._config
+        ):
             print(
-                f"KEYBOARD_USB_HID section not found in config file: {Config._config_file}"
+                f"\n\n\nNeither KEYBOARD_BLE_HID or KEYBOARD_USB_HID section found in config file: {Config._config_file}\n\n\n"
             )
             sys.exit(2)
 
