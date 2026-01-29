@@ -46,7 +46,6 @@ Demonstration video:
   - [Bluetooth (ZMK only)](#bluetooth-zmk-only)
   - [Remote Display - Web application](#remote-display---web-application)
   - [Remote Display - Desktop Application](#remote-display---desktop-application)
-- [Display on a remote host](#display-on-a-remote-host)
 - [Firmware Setup](#firmware-setup)
   - [ZMK Firmware](#zmk-firmware)
   - [QMK/Vial Firmware](#qmkvial-firmware)
@@ -220,16 +219,6 @@ Host:
 Client:
 
 `pipenv run python main.py --client [--server_ip] [--server_port]`
-
-
-## Display on a remote host
-
-The application can display the layout on a remote host, either using a web browser or a desktop application.
-
-The Desktop application might be more responsive, but requires Python installation on the remote host. It does not require any configuration, as the client tries to discover the server automatically in the local network.
-
-The web application only requires a web browser, but it needs the server IP address to be specified in the URL. It should work on any modern browser and screen size.
-
 
 
 ## Firmware Setup
