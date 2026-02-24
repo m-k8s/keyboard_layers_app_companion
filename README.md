@@ -234,7 +234,7 @@ Both USB and Bluetooth are supported, although `root` privileges are required fo
 
 The application works by receiving data sent to the computer by the keyboard when it switches between layers, using raw HID.
 
-It requires the following to be added to your QMK/Vial firmware [(reference)](https://github.com/maatthc/qmk_userspace/tree/main/keyboards/beekeeb/piantor/keymaps/manna_harbour_miryoku):
+It requires the following to be added to your QMK/Vial firmware [(reference)](https://github.com/maatthc/qmk_userspace/tree/main/keyboards/beekeeb/piantor/keymaps/maat):
 
 **Note:** With these changes, the Vial's Matrix Tester (a graphical tool) will stop working.
 
