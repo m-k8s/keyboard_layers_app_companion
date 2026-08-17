@@ -9,7 +9,9 @@ Disposition systeme : Linux fr+latin9.
 
 Options :
     -o DOSSIER     dossier de sortie (defaut : assets/ a la racine du depot)
-    --config FICH  met aussi a jour la section [LAYER_IMAGES] de ce config.ini
+    --config FICH  met aussi a jour la section [LAYER_IMAGES] de ce config.ini.
+                   Un chemin relatif est resolu depuis la racine du depot, pas
+                   depuis le repertoire courant.
     --scale N      facteur de taille des images (defaut 1.0)
     --sheet        assemble aussi une planche unique, pour impression A4
                    paysage ou fond d ecran
@@ -25,7 +27,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 # Le script vit dans custom/ : la sortie par defaut est assets/ a la racine du
 # depot, et non ./assets, pour ne pas dependre du repertoire courant.
-ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ASSETS = os.path.join(REPO, "assets")
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 FONTB = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -321,11 +324,17 @@ def main():
     ap.add_argument("vial", help="export .vial depuis Vial (Save layout)")
     ap.add_argument("-o", "--out", default=ASSETS)
     ap.add_argument("--config", default=None,
-                    help="config.ini a mettre a jour (section LAYER_IMAGES)")
+                    help="config.ini a mettre a jour (section LAYER_IMAGES) ; "
+                         "un chemin relatif est resolu depuis la racine du depot")
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--sheet", action="store_true",
                     help="assemble une planche unique de toutes les couches")
     a = ap.parse_args()
+
+    # Resolu depuis la racine du depot et non depuis le repertoire courant :
+    # le script est appelable de n importe ou, y compris via un alias.
+    if a.config and not os.path.isabs(a.config):
+        a.config = os.path.join(REPO, a.config)
 
     try:
         with open(a.vial) as f:

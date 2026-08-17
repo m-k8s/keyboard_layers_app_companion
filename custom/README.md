@@ -27,15 +27,17 @@ rattache seul.
 
     systemctl --user stop corne-overlay        # libere l'endpoint raw HID
     # https://vial.rocks : editer, puis Save layout vers ~/Documents/corne-layout-vN.vial
-    cd ~/corne/companion
-    ./custom/render-overlay.py ~/Documents/corne-layout-vN.vial --config config.ini --sheet
+    ~/corne/companion/custom/render-overlay.py \
+        ~/Documents/corne-layout-vN.vial --config config.ini --sheet
     systemctl --user start corne-overlay
 
 **Un seul processus peut ouvrir l'endpoint raw HID.** Vial et l'overlay ne
 peuvent donc pas fonctionner en meme temps : toujours arreter le service avant
 d'ouvrir Vial.
 
-A lancer depuis la racine du depot, `--config` etant un chemin relatif.
+Appelable depuis n'importe ou : le dossier de sortie et les chemins relatifs
+passes a `--config` sont resolus depuis la racine du depot, pas depuis le
+repertoire courant.
 
 `--sheet` assemble en plus `assets/planche-complete.png`, la planche unique de
 toutes les couches, a imprimer en A4 paysage ou a mettre en fond d'ecran.
