@@ -142,7 +142,7 @@ de la branche pour la construction et le flash.
     cd companion
     sudo apt-get install -y libhidapi-hidraw0 libhidapi-libusb0
     pipx install pipenv && pipenv install
-    ./custom/render-overlay.py custom/keymaps/corne-layout-v3.vial --config config.ini --sheet
+    ./custom/render-overlay.py custom/keymaps/corne-layout-v4.vial --config config.ini --sheet
     cp custom/systemd/corne-overlay.service ~/.config/systemd/user/
     systemctl --user daemon-reload && systemctl --user enable --now corne-overlay
 

@@ -34,7 +34,7 @@
         -1,
         -1,
         -1,
-        "KC_TAB",
+        "KC_LALT",
         "FN_MO13",
         "KC_SPACE",
         -1
@@ -70,7 +70,7 @@
         -1,
         -1,
         -1,
-        "KC_RGUI",
+        "KC_LGUI",
         "FN_MO23",
         "KC_ENTER",
         -1
@@ -108,7 +108,7 @@
         -1,
         -1,
         -1,
-        "KC_LGUI",
+        "KC_LALT",
         "KC_TRNS",
         "KC_SPACE",
         -1
@@ -144,7 +144,7 @@
         -1,
         -1,
         -1,
-        "KC_RGUI",
+        "KC_LGUI",
         "KC_TRNS",
         "KC_ENTER",
         -1
@@ -182,7 +182,7 @@
         -1,
         -1,
         -1,
-        "KC_LGUI",
+        "KC_LALT",
         "KC_TRNS",
         "KC_SPACE",
         -1
@@ -218,7 +218,7 @@
         -1,
         -1,
         -1,
-        "KC_RGUI",
+        "KC_LGUI",
         "KC_TRNS",
         "KC_ENTER",
         -1
@@ -256,7 +256,7 @@
         -1,
         -1,
         -1,
-        "KC_LGUI",
+        "KC_LALT",
         "KC_TRNS",
         "KC_SPACE",
         -1
@@ -292,7 +292,7 @@
         -1,
         -1,
         -1,
-        "KC_RGUI",
+        "KC_LGUI",
         "KC_TRNS",
         "KC_ENTER",
         -1
