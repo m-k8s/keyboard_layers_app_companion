@@ -211,7 +211,7 @@
         "LSFT(KC_RBRACKET)",
         "LSFT(KC_LBRACKET)",
         "LSFT(KC_EQUAL)",
-        "KC_6",
+        "KC_KP_MINUS",
         -1
       ],
       [

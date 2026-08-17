@@ -125,6 +125,13 @@ NAMED = {
     # (basculer entre les fenetres d une meme application). Sans cette mention
     # on la retire en croyant ne perdre qu un oe, et le raccourci part avec.
     "KC_GRAVE": ("\u0153\nAbove Tab", SYM),
+    # Moins et plus du pave numerique. Ctrl plus eux zoome et dezoome dans les
+    # navigateurs quelle que soit la disposition, alors que Ctrl plus la touche
+    # de la rangee des chiffres est interpretee par position (onglet N).
+    "KC_KP_MINUS": ("-\nnum", SYM),
+    "KC_KP_PLUS": ("+\nnum", SYM),
+    "KC_KP_ASTERISK": ("*\nnum", SYM),
+    "KC_KP_SLASH": ("/\nnum", SYM),
     "KC_TRNS": ("\u25bd", DIM), "KC_TRANSPARENT": ("\u25bd", DIM),
     "KC_NO": ("", DIM),
     "QK_BOOT": ("BOOT", SYS), "RESET": ("BOOT", SYS),
