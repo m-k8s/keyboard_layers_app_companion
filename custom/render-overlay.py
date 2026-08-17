@@ -2,13 +2,13 @@
 """
 Regenere les images de couches de l'overlay depuis un export Vial.
 
-    ./render-overlay.py ~/Documents/corne-layout-v4.vial
+    ./custom/render-overlay.py ~/Documents/corne-layout-v4.vial
 
 Cible : Corne v4.1 standard, 46 touches (3x6 + 3 pouces + 2 colonnes centrales).
 Disposition systeme : Linux fr+latin9.
 
 Options :
-    -o DOSSIER     dossier de sortie (defaut : ./assets)
+    -o DOSSIER     dossier de sortie (defaut : assets/ a la racine du depot)
     --config FICH  met aussi a jour la section [LAYER_IMAGES] de ce config.ini
     --scale N      facteur de taille des images (defaut 1.0)
     --sheet        assemble aussi une planche unique, pour impression A4
@@ -22,6 +22,10 @@ import re
 import sys
 import unicodedata
 from PIL import Image, ImageDraw, ImageFont
+
+# Le script vit dans custom/ : la sortie par defaut est assets/ a la racine du
+# depot, et non ./assets, pour ne pas dependre du repertoire courant.
+ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 FONTB = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -315,7 +319,7 @@ SUBTITLES = {
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("vial", help="export .vial depuis Vial (Save layout)")
-    ap.add_argument("-o", "--out", default="./assets")
+    ap.add_argument("-o", "--out", default=ASSETS)
     ap.add_argument("--config", default=None,
                     help="config.ini a mettre a jour (section LAYER_IMAGES)")
     ap.add_argument("--scale", type=float, default=1.0)

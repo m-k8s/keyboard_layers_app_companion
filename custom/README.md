@@ -28,12 +28,14 @@ rattache seul.
     systemctl --user stop corne-overlay        # libere l'endpoint raw HID
     # https://vial.rocks : editer, puis Save layout vers ~/Documents/corne-layout-vN.vial
     cd ~/corne/companion
-    ./render-overlay.py ~/Documents/corne-layout-vN.vial --config config.ini --sheet
+    ./custom/render-overlay.py ~/Documents/corne-layout-vN.vial --config config.ini --sheet
     systemctl --user start corne-overlay
 
 **Un seul processus peut ouvrir l'endpoint raw HID.** Vial et l'overlay ne
 peuvent donc pas fonctionner en meme temps : toujours arreter le service avant
 d'ouvrir Vial.
+
+A lancer depuis la racine du depot, `--config` etant un chemin relatif.
 
 `--sheet` assemble en plus `assets/planche-complete.png`, la planche unique de
 toutes les couches, a imprimer en A4 paysage ou a mettre en fond d'ecran.
@@ -113,8 +115,8 @@ geste qui peut reellement abimer le PCB.
 
 ### Fichiers ajoutes
 
-- `render-overlay.py` : genere les images de couches depuis un export Vial, avec
-  les caracteres reellement produits sous `fr+latin9`.
+- `custom/render-overlay.py` : genere les images de couches depuis un export
+  Vial, avec les caracteres reellement produits sous `fr+latin9`.
 - `custom/keymaps/*.vial` : source de verite du keymap.
 - `custom/systemd/corne-overlay.service` : demarrage automatique.
 - `custom/flash-corne.sh` : flash guide des deux moities.
@@ -138,7 +140,7 @@ de la branche pour la construction et le flash.
     cd companion
     sudo apt-get install -y libhidapi-hidraw0 libhidapi-libusb0
     pipx install pipenv && pipenv install
-    ./render-overlay.py custom/keymaps/corne-layout-v3.vial --config config.ini --sheet
+    ./custom/render-overlay.py custom/keymaps/corne-layout-v3.vial --config config.ini --sheet
     cp custom/systemd/corne-overlay.service ~/.config/systemd/user/
     systemctl --user daemon-reload && systemctl --user enable --now corne-overlay
 
