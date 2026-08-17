@@ -106,8 +106,21 @@ Section `[OVERLAY]` de `config.ini`, puis redemarrer le service.
 - Le probleme suit le clavier d'un ordinateur a l'autre, ce qui semble
   disculper le materiel alors que le cable voyage avec lui.
 
-Garder un cable **TRS** de rechange. Le v4.1 fonctionne en half duplex et
-attend un TRS, 2 anneaux et 3 conducteurs. Le v4.0 utilisait un TRRS, 3 anneaux.
+Garder un cable **TRRS** de rechange, celui a 3 anneaux et 4 conducteurs. Il
+fonctionne sur les deux revisions, c'est donc celui a acheter.
+
+Le detail, parce qu'une erreur de raisonnement a d'abord ete consignee ici. Les
+config.h de foostan donnent :
+
+    rev4_0 :  SERIAL_USART_FULL_DUPLEX, TX = GP12, RX = GP13   -> 2 lignes de donnees
+    rev4_1 :                            TX = GP12, VBUS = GP13 -> 1 ligne de donnees
+
+Le v4.1, en half duplex, a besoin de **moins** de conducteurs, pas de
+conducteurs differents : un TRRS y marche, son quatrieme conducteur restant
+inutilise. C'est verifie a l'usage sur un v4.1. Le v4.0, en full duplex, **exige**
+les 4 conducteurs, donc un TRS y serait insuffisant.
+
+Autrement dit : TRRS partout. Un TRS n'irait que sur un v4.1.
 
 Ne jamais brancher ni debrancher le jack avec l'USB connecte. C'est le seul
 geste qui peut reellement abimer le PCB.
