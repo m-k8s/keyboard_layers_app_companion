@@ -1,6 +1,1 @@
 __pycache__/
-
-# images de couches generees par render-overlay.py
-/assets/base.png
-/assets/layer[0-9].png
-/assets/planche-complete.png

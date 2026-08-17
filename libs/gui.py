@@ -7,6 +7,21 @@ import struct
 import subprocess
 from libs.config import Config
 
+# Config._config_file est un attribut de classe et Config._config un singleton
+# charge au premier appel. Le reaffecter ici, au niveau module, redirige la
+# configuration de TOUTE l application, y compris keyboard_hid et webserver,
+# sans modifier ces fichiers. main.py importe libs.gui avant d instancier quoi
+# que ce soit, l ordre est donc garanti.
+#
+# Repli sur ./config.ini si le fichier externe n existe pas : le comportement
+# d origine du projet est preserve.
+_EXT_CONFIG = os.environ.get(
+    "CORNE_OVERLAY_CONFIG",
+    os.path.expanduser("~/.config/corne-overlay/config.ini"),
+)
+if os.path.isfile(_EXT_CONFIG):
+    Config._config_file = _EXT_CONFIG
+
 os.environ["KIVY_NO_ARGS"] = "1"
 
 # Sous Wayland, un client natif ne peut ni se positionner lui-meme ni passer
@@ -38,7 +53,6 @@ from kivy.app import App  # noqa: E402,F401
 from kivy.core.window import Window  # noqa: E402
 from kivy.uix.image import Image  # noqa: E402,F401
 
-imageFolder = "./assets/"
 
 DEFAULTS = {
     "scale": 0.55,
@@ -48,6 +62,7 @@ DEFAULTS = {
     "follow_focus": 1,       # 0 = ecran fixe via monitor_index
     "anchor": "bottom",      # bottom | top | auto
     "monitor_index": 0,
+    "assets_dir": "",        # vide = ./assets/ a cote de main.py
 }
 
 
@@ -55,7 +70,7 @@ def _read_overlay_conf():
     conf = dict(DEFAULTS)
     try:
         cp = configparser.ConfigParser()
-        cp.read("config.ini")
+        cp.read(Config._config_file)   # le meme fichier que le reste de l app
         if "OVERLAY" in cp:
             s = cp["OVERLAY"]
             conf["scale"] = s.getfloat("scale", DEFAULTS["scale"])
@@ -63,6 +78,8 @@ def _read_overlay_conf():
                       "follow_focus", "monitor_index"):
                 conf[k] = s.getint(k, DEFAULTS[k])
             conf["anchor"] = s.get("anchor", DEFAULTS["anchor"]).strip().lower()
+            conf["assets_dir"] = os.path.expanduser(
+                s.get("assets_dir", DEFAULTS["assets_dir"]).strip())
     except Exception as e:
         print(f"[overlay] section OVERLAY ignoree ({e}), valeurs par defaut")
     return conf
@@ -140,6 +157,11 @@ class Gui(App):
         self._img_size = (1488, 587)
         self._monitors = []
 
+    def _image(self, layer):
+        """Chemin de l image d une couche, dans assets_dir ou a defaut ./assets/."""
+        d = self.ov["assets_dir"] or os.path.join(os.getcwd(), "assets")
+        return os.path.join(d, self.conf.layers[layer])
+
     def _pick_monitor(self):
         """(ecran, rectangle de la fenetre active ou None).
 
@@ -214,8 +236,8 @@ class Gui(App):
     # ------------------------------------------------------------------- kivy
     def build(self):
         self.title = "Corne layer overlay"
-        self._img_size = _png_size(imageFolder + self.conf.layers[0], self._img_size)
-        self.img = Image(source=imageFolder + self.conf.layers[0], allow_stretch=True)
+        self._img_size = _png_size(self._image(0), self._img_size)
+        self.img = Image(source=self._image(0), allow_stretch=True)
         self._place()
         return self.img
 
@@ -249,7 +271,7 @@ class Gui(App):
         if layer < 0 or layer >= len(self.conf.layers):
             print(f"[overlay] couche {layer} absente de config.ini, ignoree")
             return
-        self.img.source = imageFolder + self.conf.layers[layer]
+        self.img.source = self._image(layer)
         self._show()
 
     # ------------------------------------------------------------------ boucle
