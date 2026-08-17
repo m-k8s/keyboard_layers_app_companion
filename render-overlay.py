@@ -11,6 +11,8 @@ Options :
     -o DOSSIER     dossier de sortie (defaut : ./assets)
     --config FICH  met aussi a jour la section [LAYER_IMAGES] de ce config.ini
     --scale N      facteur de taille des images (defaut 1.0)
+    --sheet        assemble aussi une planche unique, pour impression A4
+                   paysage ou fond d ecran
 """
 
 import argparse
@@ -317,6 +319,8 @@ def main():
     ap.add_argument("--config", default=None,
                     help="config.ini a mettre a jour (section LAYER_IMAGES)")
     ap.add_argument("--scale", type=float, default=1.0)
+    ap.add_argument("--sheet", action="store_true",
+                    help="assemble une planche unique de toutes les couches")
     a = ap.parse_args()
 
     try:
@@ -343,6 +347,23 @@ def main():
                       os.path.join(a.out, fn), a.scale)
         print(f"couche {i} -> {fn}  {size[0]}x{size[1]}")
         names.append(fn)
+
+    if a.sheet:
+        rendus = [os.path.join(a.out, n) for n in names if n]
+        try:
+            ims = [Image.open(f) for f in rendus]
+            larg = max(i.width for i in ims)
+            haut = sum(i.height for i in ims)
+            planche = Image.new("RGB", (larg, haut), BG)
+            y = 0
+            for i in ims:
+                planche.paste(i, (0, y))
+                y += i.height
+            sp = os.path.join(a.out, "planche-complete.png")
+            planche.save(sp)
+            print(f"planche -> {sp}  {larg}x{haut}  ({len(ims)} couches)")
+        except Exception as e:
+            print(f"planche non assemblee : {e}")
 
     if a.config:
         try:

@@ -39,6 +39,10 @@ Les images de `assets/` sont **generees** et donc ignorees par git.
     ./render-overlay.py ~/Documents/corne-layout-vN.vial --config config.ini
     systemctl --user start corne-overlay
 
+Ajouter `--sheet` pour assembler en plus une planche unique de toutes les
+couches, `assets/planche-complete.png`, a imprimer en A4 paysage ou a mettre
+en fond d'ecran.
+
 Un seul processus peut ouvrir l endpoint raw HID : Vial et l overlay ne peuvent
 pas fonctionner en meme temps.
 
