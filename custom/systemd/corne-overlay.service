@@ -1,0 +1,22 @@
+[Unit]
+Description=Corne layer overlay
+Documentation=https://github.com/maatthc/keyboard_layers_app_companion
+PartOf=graphical-session.target
+After=graphical-session.target
+# pas de plafond de tentatives : le clavier peut etre branche plus tard
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=%h/corne/companion
+ExecStart=%h/.local/share/virtualenvs/companion-Ooe6syD5/bin/python main.py
+# sortie 1 = clavier absent -> on retente ; sortie 0 = Echap -> on laisse tranquille
+Restart=on-failure
+RestartSec=15
+# sans ceci, Python bufferise stdout et le journal reste vide
+Environment=PYTHONUNBUFFERED=1
+Environment=KIVY_NO_CONSOLELOG=1
+Slice=app.slice
+
+[Install]
+WantedBy=graphical-session.target
