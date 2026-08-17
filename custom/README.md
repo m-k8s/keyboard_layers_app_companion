@@ -16,6 +16,7 @@ Faire disparaitre l'overlay immediatement :
 Le remettre, voir son etat, suivre ses traces :
 
     systemctl --user start corne-overlay
+    systemctl --user restart corne-overlay     # apres regeneration des images
     systemctl --user status corne-overlay
     journalctl --user -u corne-overlay -f
 
@@ -29,11 +30,17 @@ rattache seul.
     # https://vial.rocks : editer, puis Save layout vers ~/Documents/corne-layout-vN.vial
     ~/corne/companion/custom/render-overlay.py \
         ~/Documents/corne-layout-vN.vial --config config.ini --sheet
-    systemctl --user start corne-overlay
+    systemctl --user restart corne-overlay
 
 **Un seul processus peut ouvrir l'endpoint raw HID.** Vial et l'overlay ne
 peuvent donc pas fonctionner en meme temps : toujours arreter le service avant
 d'ouvrir Vial.
+
+**Toujours finir par `restart`, jamais par `start`.** Sur un service deja actif,
+`start` ne fait rien du tout, sans erreur ni avertissement. Et Kivy sert ses
+textures depuis un cache indexe par nom de fichier : les images regenerees
+portant les memes noms, l'overlay continuerait a afficher les anciennes. Le
+symptome est trompeur, tout semble avoir fonctionne.
 
 Appelable depuis n'importe ou : le dossier de sortie et les chemins relatifs
 passes a `--config` sont resolus depuis la racine du depot, pas depuis le
