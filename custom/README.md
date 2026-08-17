@@ -36,6 +36,12 @@ rattache seul.
 peuvent donc pas fonctionner en meme temps : toujours arreter le service avant
 d'ouvrir Vial.
 
+**Ce que le clavier ne fait pas, et qu'on lui attribue a tort.** Certaines
+capacites viennent de l'environnement et non du keymap. Exemple vecu : le curseur
+en debut de ligne se fait par Ctrl+A dans un terminal, convention readline, sans
+aucune touche Debut. Avant de chercher une touche disparue, verifier si la
+fonction ne venait pas du shell, de l'application, ou d'un autre clavier.
+
 **Toujours finir par `restart`, jamais par `start`.** Sur un service deja actif,
 `start` ne fait rien du tout, sans erreur ni avertissement. Et Kivy sert ses
 textures depuis un cache indexe par nom de fichier : les images regenerees
