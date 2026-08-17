@@ -133,11 +133,11 @@
       ],
       [
         "KC_NO",
-        "KC_NO",
+        "KC_MEDIA_PLAY_PAUSE",
         "KC_END",
-        "KC_NO",
-        "KC_NO",
-        "KC_NO",
+        "KC_AUDIO_VOL_UP",
+        "KC_AUDIO_VOL_DOWN",
+        "KC_AUDIO_MUTE",
         -1
       ],
       [
