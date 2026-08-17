@@ -24,13 +24,13 @@ if os.path.isfile(_EXT_CONFIG):
 
 os.environ["KIVY_NO_ARGS"] = "1"
 
-# Sous Wayland, un client natif ne peut ni se positionner lui-meme ni passer
+# Sous Wayland, un client natif ne peut ni se positionner lui-même ni passer
 # au premier plan : le protocole ne le permet pas. On force donc SDL sur X11
 # pour tourner via Xwayland, ou le placement et _NET_WM_STATE_ABOVE marchent.
 os.environ.setdefault("SDL_VIDEODRIVER", "x11")
 
 # --------------------------------------------------------------------------
-# A poser AVANT l'import de kivy.core.window : cet import cree la fenetre.
+# A poser AVANT l'import de kivy.core.window : cet import cree la fenêtre.
 # --------------------------------------------------------------------------
 from kivy.config import Config as KivyConfig  # noqa: E402
 
@@ -39,7 +39,7 @@ KivyConfig.set("graphics", "resizable", "0")
 KivyConfig.set("graphics", "position", "custom")
 KivyConfig.set("graphics", "always_on_top", "1")
 # Cette app n affiche qu une image : aucun fournisseur d entree n est utile.
-# probesysfs balaie /dev/input, appelle xinput pour chaque peripherique et
+# probesysfs balaie /dev/input, appelle xinput pour chaque périphérique et
 # inonde le journal. On ne garde que la souris.
 try:
     for _name, _ in list(KivyConfig.items("input")):
@@ -59,7 +59,7 @@ DEFAULTS = {
     "hide_on_layer": 0,
     "margin_bottom": 70,
     "always_on_top": 1,
-    "follow_focus": 1,       # 0 = ecran fixe via monitor_index
+    "follow_focus": 1,       # 0 = écran fixe via monitor_index
     "anchor": "bottom",      # bottom | top | auto
     "monitor_index": 0,
     "assets_dir": "",        # vide = ./assets/ a cote de main.py
@@ -70,7 +70,7 @@ def _read_overlay_conf():
     conf = dict(DEFAULTS)
     try:
         cp = configparser.ConfigParser()
-        cp.read(Config._config_file)   # le meme fichier que le reste de l app
+        cp.read(Config._config_file)   # le même fichier que le reste de l app
         if "OVERLAY" in cp:
             s = cp["OVERLAY"]
             conf["scale"] = s.getfloat("scale", DEFAULTS["scale"])
@@ -81,7 +81,7 @@ def _read_overlay_conf():
             conf["assets_dir"] = os.path.expanduser(
                 s.get("assets_dir", DEFAULTS["assets_dir"]).strip())
     except Exception as e:
-        print(f"[overlay] section OVERLAY ignoree ({e}), valeurs par defaut")
+        print(f"[overlay] section OVERLAY ignorée ({e}), valeurs par défaut")
     return conf
 
 
@@ -123,11 +123,11 @@ def _monitors():
 
 
 def _focused_window():
-    """(x, y, largeur, hauteur) de la fenetre active, ou None.
+    """(x, y, largeur, hauteur) de la fenêtre active, ou None.
 
     Passe par l extension GNOME focused-window-dbus. C est la seule source
     fiable sous Wayland : _NET_ACTIVE_WINDOW vaut 0x0, la position du pointeur
-    vue par Xwayland est gelee des que le curseur survole une fenetre native,
+    vue par Xwayland est gelee des que le curseur survole une fenêtre native,
     et org.gnome.Shell.Introspect.GetWindows est refuse aux appelants ordinaires.
     """
     try:
@@ -142,7 +142,7 @@ def _focused_window():
         d = json.loads(m.group(1))
         return int(d["x"]), int(d["y"]), int(d["width"]), int(d["height"])
     except Exception as e:
-        print(f"[overlay] fenetre active indetectable ({e})")
+        print(f"[overlay] fenêtre active indetectable ({e})")
         return None
 
 
@@ -158,14 +158,14 @@ class Gui(App):
         self._monitors = []
 
     def _image(self, layer):
-        """Chemin de l image d une couche, dans assets_dir ou a defaut ./assets/."""
+        """Chemin de l image d une couche, dans assets_dir ou a défaut ./assets/."""
         d = self.ov["assets_dir"] or os.path.join(os.getcwd(), "assets")
         return os.path.join(d, self.conf.layers[layer])
 
     def _pick_monitor(self):
-        """(ecran, rectangle de la fenetre active ou None).
+        """(écran, rectangle de la fenêtre active ou None).
 
-        L ecran est celui qui contient le centre de la fenetre active. On se fie
+        L écran est celui qui contient le centre de la fenêtre active. On se fie
         aux coordonnees et jamais a l index renvoye par Mutter : son ordre ne
         correspond pas a celui de xrandr.
         """
@@ -185,7 +185,7 @@ class Gui(App):
                         x, y, w, h, _ = m
                         if x <= cx < x + w and y <= cy < y + h:
                             return m, win
-                    if attempt == 0:      # ecrans peut-etre reconfigures
+                    if attempt == 0:      # ecrans peut-être reconfigures
                         self._monitors = _monitors() or mons
                         mons = self._monitors
 
@@ -206,7 +206,7 @@ class Gui(App):
             self._size = (w, h)
             Window.size = (w, h)
             Window.left, Window.top = 80, 80
-            print(f"[overlay] {w}x{h} en (80,80), ecran non detecte")
+            print(f"[overlay] {w}x{h} en (80,80), écran non détecté")
             return
 
         mx, my, mw, mh, _ = mon
@@ -217,8 +217,8 @@ class Gui(App):
 
         anchor = self.ov["anchor"]
         if anchor == "auto":
-            # On se place a l oppose du centre vertical de la fenetre active :
-            # si elle occupe le bas de l ecran, l overlay monte, et inversement.
+            # On se place a l oppose du centre vertical de la fenêtre active :
+            # si elle occupe le bas de l écran, l overlay monte, et inversement.
             anchor = "bottom"
             if win:
                 wcy = win[1] + win[3] // 2
@@ -231,7 +231,7 @@ class Gui(App):
         Window.left = left
         Window.top = top
         print(f"[overlay] {w}x{h} en ({left},{top}) ancre={anchor} "
-              f"ecran {mw}x{mh}+{mx}+{my}")
+              f"écran {mw}x{mh}+{mx}+{my}")
 
     # ------------------------------------------------------------------- kivy
     def build(self):
@@ -259,7 +259,7 @@ class Gui(App):
         if self._visible:
             return
         try:
-            self._place()      # le WM a pu repositionner, et l'ecran a pu changer
+            self._place()      # le WM a pu repositionner, et l'écran a pu changer
         except Exception as e:
             print(f"[overlay] agrandissement impossible ({e})")
         self._visible = True
@@ -269,7 +269,7 @@ class Gui(App):
             self._hide()
             return
         if layer < 0 or layer >= len(self.conf.layers):
-            print(f"[overlay] couche {layer} absente de config.ini, ignoree")
+            print(f"[overlay] couche {layer} absente de config.ini, ignorée")
             return
         self.img.source = self._image(layer)
         self._show()
