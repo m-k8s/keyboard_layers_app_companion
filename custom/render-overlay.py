@@ -121,6 +121,10 @@ NAMED = {
     "KC_MNXT": ("Suiv", NAV), "KC_MEDIA_NEXT_TRACK": ("Suiv", NAV),
     "KC_MPRV": ("Pr\u00e9c", NAV), "KC_MEDIA_PREV_TRACK": ("Pr\u00e9c", NAV),
     "FN_MO13": ("C1 \u00b7 C3", LAY), "FN_MO23": ("C2 \u00b7 C3", LAY),
+    # KC_GRAVE porte le keysym Above_Tab, que GNOME utilise pour switch-group
+    # (basculer entre les fenetres d une meme application). Sans cette mention
+    # on la retire en croyant ne perdre qu un oe, et le raccourci part avec.
+    "KC_GRAVE": ("\u0153\nAbove Tab", SYM),
     "KC_TRNS": ("\u25bd", DIM), "KC_TRANSPARENT": ("\u25bd", DIM),
     "KC_NO": ("", DIM),
     "QK_BOOT": ("BOOT", SYS), "RESET": ("BOOT", SYS),
