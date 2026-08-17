@@ -127,7 +127,8 @@ geste qui peut reellement abimer le PCB.
 - `custom/render-overlay.py` : genere les images de couches depuis un export
   Vial, avec les caracteres reellement produits sous `fr+latin9`.
 - `custom/keymaps/*.vial` : source de verite du keymap.
-- `custom/systemd/corne-overlay.service` : demarrage automatique.
+- `custom/install.sh` : installation automatisee, idempotente, avec un mode
+  `--check` qui inspecte sans rien modifier.
 - `custom/flash-corne.sh` : flash guide des deux moities.
 
 Les images de `assets/` sont **generees** et donc ignorees par git.
@@ -143,18 +144,21 @@ Le keymap y emet un paquet raw HID a chaque changement de couche, marqueur
 `0x90` a l'octet 24, numero de couche a l'octet 25. Voir le `README.custom.md`
 de la branche pour la construction et le flash.
 
-### Reinstaller de zero
+### Installer sur une nouvelle machine
 
     git clone -b corne-v4-fr-latin9 git@github.com:m-k8s/keyboard_layers_app_companion.git companion
     cd companion
-    sudo apt-get install -y libhidapi-hidraw0 libhidapi-libusb0
-    pipx install pipenv && pipenv install
-    ./custom/render-overlay.py custom/keymaps/corne-layout-v5.vial --config config.ini --sheet
-    cp custom/systemd/corne-overlay.service ~/.config/systemd/user/
-    systemctl --user daemon-reload && systemctl --user enable --now corne-overlay
+    ./custom/install.sh
 
-Le chemin du venv est code en dur dans l'unite systemd et depend du chemin du
-dossier : verifier `ExecStart` si le projet est deplace.
+Le script installe les paquets systeme, la regle udev, l'environnement Python,
+genere les images depuis le dernier `.vial` du depot, puis ecrit et active
+l'unite systemd. `./custom/install.sh --check` inspecte tout sans rien modifier.
+
+L'unite systemd est **generee** et non versionnee : le chemin du venv contient
+un hash derive du chemin du projet, donc il differe d'une machine a l'autre.
+
+Le script ne touche ni au firmware ni au keymap : tous deux vivent dans le
+clavier et le suivent d'une machine a l'autre.
 
 **Dependance externe** : l'extension GNOME `focused-window-dbus@flexagoon.com`
 doit etre installee et activee, sinon `follow_focus` retombe silencieusement
