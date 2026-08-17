@@ -206,12 +206,12 @@
         "KC_RALT"
       ],
       [
-        "KC_NO",
+        "LSFT(KC_MINUS)",
         "LSFT(KC_BSLASH)",
         "LSFT(KC_RBRACKET)",
         "LSFT(KC_LBRACKET)",
         "LSFT(KC_EQUAL)",
-        "LSFT(KC_MINUS)",
+        "KC_6",
         -1
       ],
       [
